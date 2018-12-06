@@ -5,19 +5,28 @@
     let app = express();
     let port = 3000 || process.env.port
 
-    // let Yeelight = require("yeelight-awesome").Yeelight;
-    // const yeelight = new Yeelight({ "lightIp": "192.168.0.109", "lightPort": "55443" });
+    let colors = [
+        { "r": 174, "g": 68, "b": 47 },
+        { "r": 47, "g": 174, "b": 68 },
+        { "r": 68, "g": 47, "b": 174 },
+        { "r": 255, "g": 0, "b": 255 }
+    ]
 
-    // yeelight.connect();
+    let mappings = require("./mappings/csgo");
 
-    // yeelight.on("connected", () => {
-    //     console.log("fgoi");
-    // });
+    let CSGOGSI = require('node-csgo-gsi');
+    let gsi = new CSGOGSI();
 
     let Yeelight = require("./helpers/yeelight.js");
     let yeelight = new Yeelight({ "lightIp": "192.168.0.109", "lightPort": "55443" });
-    yeelight.connect().then(function () {
-        console.log("foi");
+    yeelight.connect().then(() => {
+        console.log(":: Connected on Yeelight ::");54
+
+        gsi.on('roundWinTeam', function(data) {
+            yeelight.shine(mappings.bombExplosion, 500).then(() => {
+                console.log("ptonto");
+            });
+        });
     });
 
 
@@ -27,8 +36,7 @@
     //     console.log(err);
     // })
 
-    // let CSGOGSI = require('node-csgo-gsi');
-    // let gsi = new CSGOGSI();
+    
     
     // let y = require("yeelight-awesome"); 
 
@@ -45,33 +53,12 @@
     //         lightPort: device.port
     //     });
  
-    //     // yeelight.on("connected", () => {
-    //     //     gsi.on('roundWinTeam', function(data) {
-    //     //         yeelight.setRGB(new y.Color(174,68,47), "smooth", 500).then(function () {
-    //     //             setTimeout(() => {
-    //     //                 yeelight.setRGB(new y.Color(47,174,68), "smooth", 500).then(function () {
-    //     //                     setTimeout(() => {
-    //     //                         yeelight.setRGB(new y.Color(68,47,174), "smooth", 500).then(function () {
-    //     //                             setTimeout(() => {
-    //     //                                 yeelight.setRGB(new y.Color(255,0,255), "smooth", 500).then(function () {
-                                            
-    //     //                                 });
-    //     //                             }, 500)
-    //     //                         });
-    //     //                     }, 500)
-    //     //                 });
-    //     //             }, 500)
-    //     //         });
-    //     //     });
-    //     // });
+        // yeelight.on("connected", () => {
+        //     gsi.on('roundWinTeam', function(data) {
+                
+        //     });
+        // });
 
-    //     let colors = [
-    //         { "r": 174, "g": 68, "b": 47 },
-    //         { "r": 47, "g": 174, "b": 68 },
-    //         { "r": 68, "g": 47, "b": 174 },
-    //         { "r": 255, "g": 0, "b": 255 }
-    //     ]
-    
 
     //     yeelight.on("connected", () => {
     //         shine(yeelight, colors, 1000);
