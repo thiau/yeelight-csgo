@@ -5,88 +5,38 @@
     let app = express();
     let port = 3000 || process.env.port
 
-    let colors = [
-        { "r": 174, "g": 68, "b": 47 },
-        { "r": 47, "g": 174, "b": 68 },
-        { "r": 68, "g": 47, "b": 174 },
-        { "r": 255, "g": 0, "b": 255 }
-    ]
-
-    let mappings = require("./mappings/csgo");
-
     let CSGOGSI = require('node-csgo-gsi');
     let gsi = new CSGOGSI();
 
     let Yeelight = require("./helpers/yeelight.js");
-    let yeelight = new Yeelight({ "lightIp": "192.168.0.109", "lightPort": "55443" });
-    yeelight.connect().then(() => {
-        console.log(":: Connected on Yeelight ::");54
+    let yeelight = new Yeelight({ "lightIp": "10.0.0.101", "lightPort": "55443" });
 
-        gsi.on('roundWinTeam', function(data) {
-            yeelight.shine(mappings.bombExplosion, 500).then(() => {
-                console.log("ptonto");
-            });
-        });
+    yeelight.connect().then((lightProps) => {
+        console.log(":: Connected on Yeelight ::");
+        console.log(lightProps);
+        yeelight.changeColor('16711688').then(function (data) {
+            console.log(data)
+        })
+
+        yeelight.changeColor('16711688').catch(err => console.log(err));
+        
+
+        // yeelight.changeHSV(0, 20, 500, 20).catch(err => console.log(err));
     });
 
 
-    // yeelight.discover().then(function (device) {
-    //     console.log("done");
-    // }).catch(err => {
-    //     console.log(err);
-    // })
 
     
-    
-    // let y = require("yeelight-awesome"); 
 
-    // const discover = new y.Discover({
-    //     port: 1982,
-    //     debug: true
+    // gsi.on("gameMap", function(data) {
+    //     console.log(data);
     // });
 
-    // discover.once("deviceAdded", (device) => {
-    //     console.log("achou");
-
-    //     const yeelight = new y.Yeelight({
-    //         lightIp: device.host,
-    //         lightPort: device.port
-    //     });
- 
-        // yeelight.on("connected", () => {
-        //     gsi.on('roundWinTeam', function(data) {
-                
-        //     });
-        // });
-
-
-    //     yeelight.on("connected", () => {
-    //         shine(yeelight, colors, 1000);
-    //     });
-
-    //     yeelight.connect();
+    // gsi.on("bombTimeLeft", function(data) {
+    //     console.log(data);
     // });
 
-    // discover.start();
-
-    // function changeColor(yeelight, color, transition_ms) {
-    //     return new Promise((resolve, reject) => {
-    //         yeelight.setRGB(new y.Color(color.r, color.g, color.b), "smooth", transition_ms).then(() => {
-    //             setTimeout(resolve, transition_ms);
-    //         }).catch(err => {
-    //             console.log(err);
-    //         });
-    //     })
-    // }
-
-    // async function shine(light, colors, transition_ms) {
-    //     for (let i in colors) {
-    //         await changeColor(light, colors[i], transition_ms);
-    //         console.log("done");
-    //     }
-    //  }
-
-    app.listen(port, function() {
-        console.log(`Server is up on port ${port}`);
-    });
+    // app.listen(port, function () {
+    //     console.log(`Server is up on port ${port}`);
+    // });
 }())
